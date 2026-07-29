@@ -75,7 +75,7 @@ function TaskCard({ task, onDelete, onEdit }) {
             <button
               type="button"
               onClick={() => onEdit(task)}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+              className="cursor-pointer rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
             >
               Edit
             </button>
@@ -83,7 +83,7 @@ function TaskCard({ task, onDelete, onEdit }) {
             <button
               type="button"
               onClick={handleDelete}
-              className="rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100"
+              className="cursor-pointer rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-100"
             >
               Delete
             </button>

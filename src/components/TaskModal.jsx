@@ -61,7 +61,7 @@ function TaskModal({ isOpen, task, onClose, onSubmit }) {
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+            className="cursor-pointer flex h-10 w-10 items-center justify-center rounded-full text-2xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
           >
             ×
           </button>
