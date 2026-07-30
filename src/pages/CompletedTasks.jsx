@@ -5,6 +5,8 @@ import { useTasks } from "../context/useTasks";
 
 function CompletedTasks() {
   const { tasks, editTask, deleteTask } = useTasks();
+  const [actionError, setActionError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [sortOrder, setSortOrder] = useState("ascending");
   const [selectedTask, setSelectedTask] = useState(null);
@@ -28,9 +30,28 @@ function CompletedTasks() {
     setSelectedTask(null);
   };
 
-  const handleSubmit = (taskData) => {
-    editTask(selectedTask.id, taskData);
-    closeModal();
+  const handleSubmit = async (taskData) => {
+    try {
+      setIsSubmitting(true);
+      setActionError("");
+
+      await editTask(selectedTask.id, taskData);
+
+      closeModal();
+    } catch (error) {
+      setActionError(error.message || "Unable to update the task.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      setActionError("");
+      await deleteTask(taskId);
+    } catch (error) {
+      setActionError(error.message || "Unable to delete the task.");
+    }
   };
 
   return (
@@ -62,7 +83,7 @@ function CompletedTasks() {
         <TaskList
           tasks={completedTasks}
           onEdit={setSelectedTask}
-          onDelete={deleteTask}
+          onDelete={handleDelete}
           emptyMessage="Tasks marked as completed will appear here."
         />
       </section>
@@ -72,6 +93,8 @@ function CompletedTasks() {
         task={selectedTask}
         onClose={closeModal}
         onSubmit={handleSubmit}
+        error={actionError}
+        isSubmitting={isSubmitting}
       />
     </>
   );

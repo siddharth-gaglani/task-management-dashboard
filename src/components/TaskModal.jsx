@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import TaskForm from "./TaskForm";
 
-function TaskModal({ isOpen, task, onClose, onSubmit }) {
+function TaskModal({ isOpen, task, onClose, onSubmit, error, isSubmitting }) {
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -67,8 +67,22 @@ function TaskModal({ isOpen, task, onClose, onSubmit }) {
           </button>
         </div>
 
+        {error && (
+          <div
+            role="alert"
+            className="mb-5 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            {error}
+          </div>
+        )}
+
         <div className="p-6">
-          <TaskForm initialTask={task} onSubmit={onSubmit} onCancel={onClose} />
+          <TaskForm
+            initialTask={task}
+            onSubmit={onSubmit}
+            onCancel={onClose}
+            isSubmitting={isSubmitting}
+          />
         </div>
       </div>
     </div>

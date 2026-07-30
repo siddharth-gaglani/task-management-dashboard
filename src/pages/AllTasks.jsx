@@ -5,12 +5,15 @@ import TaskModal from "../components/TaskModal";
 import { useTasks } from "../context/useTasks";
 
 function AllTasks() {
-  const { tasks, taskSummary, addTask, editTask, deleteTask } = useTasks();
+  const { tasks, taskSummary, loading, error, addTask, editTask, deleteTask } =
+    useTasks();
 
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState("ascending");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const visibleTasks = useMemo(() => {
     const filteredTasks =
@@ -45,14 +48,32 @@ function AllTasks() {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = (taskData) => {
-    if (selectedTask) {
-      editTask(selectedTask.id, taskData);
-    } else {
-      addTask(taskData);
-    }
+  const handleSubmit = async (taskData) => {
+    try {
+      setIsSubmitting(true);
+      setSubmitError("");
 
-    closeModal();
+      if (selectedTask) {
+        await editTask(selectedTask.id, taskData);
+      } else {
+        await addTask(taskData);
+      }
+
+      closeModal();
+    } catch (error) {
+      setSubmitError(error.message || "Unable to save the task.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      setSubmitError("");
+      await deleteTask(taskId);
+    } catch (error) {
+      setSubmitError(error.message || "Unable to delete the task.");
+    }
   };
 
   return (
@@ -109,12 +130,26 @@ function AllTasks() {
           </div>
         </div>
 
-        <TaskList
-          tasks={visibleTasks}
-          onEdit={openEditModal}
-          onDelete={deleteTask}
-          emptyMessage="Try changing the status filter or add a new task."
-        />
+        {loading && (
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-600">
+            Loading tasks...
+          </div>
+        )}
+
+        {error && (
+          <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
+        {!loading && (
+          <TaskList
+            tasks={visibleTasks}
+            onEdit={openEditModal}
+            onDelete={handleDelete}
+            emptyMessage="Try changing the status filter or add a new task."
+          />
+        )}
       </section>
 
       <TaskModal
@@ -122,6 +157,8 @@ function AllTasks() {
         task={selectedTask}
         onClose={closeModal}
         onSubmit={handleSubmit}
+        error={submitError}
+        isSubmitting={isSubmitting}
       />
     </>
   );

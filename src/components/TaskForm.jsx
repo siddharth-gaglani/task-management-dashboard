@@ -7,7 +7,7 @@ const emptyTask = {
   dueDate: "",
 };
 
-function TaskForm({ initialTask, onSubmit, onCancel }) {
+function TaskForm({ initialTask, onSubmit, onCancel, isSubmitting }) {
   const [formData, setFormData] = useState(() => {
     if (!initialTask) {
       return emptyTask;
@@ -180,9 +180,14 @@ function TaskForm({ initialTask, onSubmit, onCancel }) {
 
         <button
           type="submit"
-          className="cursor-pointer rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          disabled={isSubmitting}
+          className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {initialTask ? "Save changes" : "Add task"}
+          {isSubmitting
+            ? "Saving..."
+            : initialTask
+              ? "Save changes"
+              : "Add task"}
         </button>
       </div>
     </form>
