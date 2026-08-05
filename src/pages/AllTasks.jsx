@@ -3,6 +3,7 @@ import SummaryCard from "../components/SummaryCard";
 import TaskList from "../components/TaskList";
 import TaskModal from "../components/TaskModal";
 import { useTasks } from "../context/useTasks";
+import { dummyTasks } from "../data/dummyTasks";
 
 function AllTasks() {
   const { tasks, taskSummary, addTask, editTask, deleteTask } = useTasks();
@@ -110,7 +111,7 @@ function AllTasks() {
         </div>
 
         <TaskList
-          tasks={visibleTasks}
+          tasks={dummyTasks}
           onEdit={openEditModal}
           onDelete={deleteTask}
           emptyMessage="Try changing the status filter or add a new task."

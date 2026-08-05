@@ -1,4 +1,13 @@
-import TaskCard from "./TaskCard";
+// import TaskCard from "./TaskCard";
+import VirtualTaskRow from "./VirtualTaskRow";
+
+/*
+ give every row a fixed height
+ track the container scrolltop
+ calculate which rows are visible
+ render only those
+ render 2 additonal below and above
+*/
 
 function TaskList({ tasks, onEdit, onDelete, emptyMessage }) {
   if (tasks.length === 0) {
@@ -20,7 +29,7 @@ function TaskList({ tasks, onEdit, onDelete, emptyMessage }) {
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {tasks.map((task) => (
-        <TaskCard
+        <VirtualTaskRow
           key={task.id}
           task={task}
           onEdit={onEdit}
